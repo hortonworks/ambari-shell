@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import com.sequenceiq.ambari.client.AmbariClient;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
+import com.sequenceiq.ambari.shell.model.Blueprint;
 
 /**
  * Commands used in the shell. Does nothing more than executing and delegating the commands
@@ -270,5 +271,38 @@ public class AmbariCommands implements CommandMarker {
   public String debugOff() {
     client.setDebugEnabled(false);
     return "debug disabled";
+  }
+
+  @CliAvailabilityIndicator({"addBlueprint"})
+  public boolean isAddBlueprintCommandAvailable() {
+    return client != null;
+  }
+
+  @CliCommand(value = {"addBlueprint"})
+  public String addBlueprint(
+    @CliOption(key = {"type"}, mandatory = true, help = "Type of the blueprint") Blueprint blueprint,
+    @CliOption(key = {"name"}, mandatory = true, help = "Name of the blueprint") String name,
+    @CliOption(key = {"url"}, mandatory = false, help = "URL of a custom blueprint json") String url) {
+    String result;
+    if (blueprint.equals(Blueprint.CUSTOM)) {
+      result = addCustomBlueprint(name, url);
+    } else {
+      result = addDefaultBlueprint(blueprint);
+    }
+    return result;
+  }
+
+  private String addCustomBlueprint(String name, String url) {
+    String result;
+    if (url == null) {
+      result = "In case of custom blueprint please specify the url";
+    } else {
+      result = client.addBlueprint(name, url);
+    }
+    return result;
+  }
+
+  private String addDefaultBlueprint(Blueprint blueprint) {
+    return client.addBlueprint(blueprint.getName(), null);
   }
 }
