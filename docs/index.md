@@ -161,7 +161,7 @@ To sum it up in less than two minutes watch this video:
 https://asciinema.org/a/9783
 
 ## Known Issues
-- Unfortunately Ambari often fails to install Ganglia due to network issues, either try again or remove that Ganglia from your blueprint.
+- Unfortunately Ambari often fails to install Ganglia due to network issues, either try again or remove Ganglia from your blueprint.
 - To use the ```cluster autoAssign``` feature at least 1 host group's name should start with slave_ e.g. ```slave_1```
 
 [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/da1aff134f981b790d7870262731514e "githalytics.com")](http://githalytics.com/sequenceiq/ambari-shell)
