@@ -43,7 +43,7 @@ Spring-Boot also provides a helper to launch those jars: [JarLauncher](http://do
 After compiling the project, the shell is ready to use (make sure you use Java 7 or above).
 
 ```
-java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.server=localhost --ambari.port=8080 --ambari.user=admin --ambari.password=admin
+java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.host=localhost --ambari.port=8080 --ambari.user=admin --ambari.password=admin
 ```
 
 The `--ambari` options can be omitted if they are the default values otherwise you only need to specify the difference, e.g just the port is different
