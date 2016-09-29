@@ -111,7 +111,7 @@ Once you logged in you can say `hello`.
            |  / / \ \  \   \_\
            |__|_|  |_|__\
 
-Initially there are no blueprints available - you cn add blueprints from file or URL. For your convenience we have added 2 blueprints as defaults.
+Initially there are no blueprints available - you can add blueprints from file or URL. For your convenience we have added 2 blueprints as defaults.
 You can get these blueprints by using the `blueprint defaults` command. The result is the following:
 ```
   BLUEPRINT              STACK
