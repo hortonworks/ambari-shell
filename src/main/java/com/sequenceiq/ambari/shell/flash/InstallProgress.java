@@ -35,6 +35,7 @@ public class InstallProgress extends AbstractFlash {
   private final boolean exit;
   private AmbariClient client;
   private volatile boolean done;
+  private volatile boolean failed;
 
   public InstallProgress(JLineShellComponent shell, AmbariClient client, boolean exit) {
     super(shell, FlashType.INSTALL);
@@ -62,6 +63,7 @@ public class InstallProgress extends AbstractFlash {
           }
         } else if (intValue == FAILED) {
           sb.append("Installation: FAILED");
+          failed = true;
           done = true;
         } else {
           sb.append("Installation: COMPLETE");
@@ -72,7 +74,7 @@ public class InstallProgress extends AbstractFlash {
       }
     } else {
       if (exit) {
-        System.exit(0);
+        System.exit(failed ? 1 : 0);
       }
     }
     return sb.toString();
