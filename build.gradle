@@ -32,6 +32,11 @@ allprojects {
 
 jar {
     baseName = 'ambari-shell'
+    manifest {
+        attributes(
+            "Implementation-Version": "${version ?: 'dev'}",
+        )
+    }
 }
 
 configurations {
