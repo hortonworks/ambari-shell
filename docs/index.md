@@ -1,8 +1,8 @@
 # Ambari Shell
 
 [Ambari](http://ambari.apache.org/) is aimed to help provision/manage/monitor Hadoop clusters.
-Although it has a [REST API](https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/index.md)
-right now the only way to use ambari is by usingh the web-application.
+Although it has a [REST API](https://github.com/apache/ambari/blob/trunk/ambari-server/docs/api/v1/index.md),
+right now the only way to use Ambari is by using the web-application.
 
 Ambari Shell's aim is to provide an interactive command line tool which supports:
 
@@ -13,31 +13,31 @@ Ambari Shell's aim is to provide an interactive command line tool which supports
 
 ## Architecture
 
-To implement ambari-shell the following options were evaluated:
+To implement Ambari Shell the following options were evaluated:
 
-- **python**: seems a natural fit as a few components of Ambari are written in python. Also
+- **python**: seems a natural fit, as a few components of Ambari are written in python. Also
   an [Ambari python shell](https://cwiki.apache.org/confluence/display/AMBARI/Ambari+python+Shell)
   was announced on Ambari wiki page, but after a discussion with committers, it turned out
   to be abandoned path. The official [Ambari python client](https://cwiki.apache.org/confluence/display/AMBARI/Ambari+python+Client)
   hasn't been released, so the python option is eliminated.
 - **go**: go would solve nicely the usual dependency hell (pip, gem, classpath, you name it), but unfortunately our
   team has no experience with it.
-- **java**: The **write-once-run-everywhere** nature provides support for all OS. [Spring-Shell](http://docs.spring.io/spring-shell/docs/1.0.x/reference/htmlsingle/#preface)
+- **java**: The **write-once-run-everywhere** nature provides support for all OS. [Spring Shell](http://docs.spring.io/spring-shell/docs/1.0.x/reference/htmlsingle/#preface)
   seems a natural fit as a base framework.
 
-Spring-Shell is also battle tested in various Spring projects including:
+Spring Shell is also battle tested in various Spring projects including:
 - [Spring-Roo](http://projects.spring.io/spring-roo/): lightweight cli tool to aim Rapid Application Development
 - [Spring-XD](http://docs.spring.io/spring-xd/docs/1.0.0.BUILD-SNAPSHOT/reference/html) a user-friendly
   front end for the REST API of Spring XD. Spring XD is a unified, distributed,
   service for data ingestion, real time analytics, batch processing, and data export.
 - [Spring-Rest-Shell](https://github.com/spring-projects/rest-shell) a command-line shell that aims to make writing REST-based applications easier.
   Spring Rest-Shell itself would be enough to communicate against Ambari REST API, but we wanted a more
-  Donamin Specific Language (DSL) nature of the command structure.
+  Domain Specific Language (DSL) nature of the command structure.
 
 ## Installation and usage
 
-Ambari-Shell is distributed as a single-file executable jar. So no `ClassNotFound` should happen. The  **uber jar**
-is generated with the help of spring-boot-maven-plugin available at: [Spring-Boot](http://docs.spring.io/spring-boot/docs/1.0.1.RELEASE/reference/htmlsingle/#executable-jar).
+Ambari Shell is distributed as a single-file executable jar. So no `ClassNotFound` should happen. The  **uber jar**
+is generated with the help of spring-boot-maven-plugin available at [Spring-Boot](http://docs.spring.io/spring-boot/docs/1.0.1.RELEASE/reference/htmlsingle/#executable-jar).
 Spring-Boot also provides a helper to launch those jars: [JarLauncher](http://docs.spring.io/spring-boot/docs/1.0.1.RELEASE/reference/htmlsingle/#executable-jar-launching).
 
 After compiling the project, the shell is ready to use (make sure you use Java 7 or above).
@@ -46,7 +46,7 @@ After compiling the project, the shell is ready to use (make sure you use Java 7
 java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.server=localhost --ambari.port=8080 --ambari.user=admin --ambari.password=admin
 ```
 
-The `--ambari` options can be omitted if they are the default values otherwise you only need to specify the difference, e.g just the port is different
+The `--ambari` options can be omitted if they are the default values, otherwise you only need to specify the difference, e.g if only the port is different
 
 ```
 java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.port=49178
@@ -58,7 +58,7 @@ java -jar ambari-shell/target/ambari-shell-1.3.0-SNAPSHOT.jar --ambari.port=4917
  / ___ \ | | | | | || |_) || (_| || |   | | ___) || | | ||  __/| || |
 /_/   \_\|_| |_| |_||_.__/  \__,_||_|   |_||____/ |_| |_| \___||_||_|
 
-Welcome to Ambari Shell. For assistance press tab or use the `hint` command.
+Welcome to Ambari Shell. For command and param completion press TAB, for assistance type 'hint'.
 ```
 
 ## Implemented Commands
@@ -68,12 +68,16 @@ Welcome to Ambari Shell. For assistance press tab or use the `hint` command.
 - **blueprint list** - Lists all known blueprints
 - **blueprint show** - Shows the blueprint by its id
 - **cluster assign** - Assign host to host group
-- **cluster autoAssign** - Auto assigns host to host groups (based on blueprint cardinality)
+- **cluster autoAssign** - Automatically assigns hosts to different host groups base on the provided strategy
 - **cluster build** - Starts to build a cluster
 - **cluster create** - Create a cluster based on current blueprint and assigned hosts
 - **cluster delete** - Delete the cluster
 - **cluster preview** - Shows the currently assigned hosts
 - **cluster reset** - Clears the host - host group assignments
+- **configuration download** - Downloads the desired configuration
+- **configuration modify** - Modify the desired configuration
+- **configuration set** - Sets the desired configuration
+- **configuration show** - Prints the desired configuration
 - **debug off** - Stops showing the URL of the API calls
 - **debug on** - Shows the URL of the API calls
 - **exit** - Exits the shell
@@ -85,15 +89,16 @@ Welcome to Ambari Shell. For assistance press tab or use the `hint` command.
 - **host list** - Lists the available hosts
 - **quit** - Exits the shell
 - **script** - Parses the specified resource file and executes its commands
-- **service components** - Lists all services with their components
-- **service list** - Lists the available services
-- **services start** - Starts all the services
-- **services stop** - Stops all the running services
+- **services components** - Lists all services with their components
+- **services list** - Lists the available services
+- **services start** - Starts a service/all the services
+- **services stop** - Stops a service/all the running services
 - **tasks** - Lists the Ambari tasks
+- **users changepassword** - Change a user's password
 - **version** - Displays shell version
 
 Please note that all commands are context aware - and are available only when it makes sense.
-For example the `cluster create` command is not available until a `blueprint` has not been added or selected.
+For example the `cluster create` command is not available until a `blueprint` has been added or selected.
 A good approach is to use the `hint` command - as the Ambari UI, this will give you hints about the available commands and the flow of creating or configuring a cluster.
 
 *You can always use TAB for completion or available parameters.*
@@ -116,8 +121,11 @@ You can get these blueprints by using the `blueprint defaults` command. The resu
 ```
   BLUEPRINT              STACK
   ---------------------  -------
-  multi-node-hdfs-yarn   HDP:2.0
-  single-node-hdfs-yarn  HDP:2.0
+  hdp-singlenode-2.2     HDP:2.2
+  multi-node-hdfs-yarn   HDP:2.2
+  hdp-multinode-default  HDP:2.2
+  lambda-architecture    HDP:2.2
+  single-node-hdfs-yarn  HDP:2.2
 ```
 
 Once the blueprints are available you can use them to create a cluster. You can use the following command: `cluster build --blueprint single-node-hdfs-yarn`.
@@ -127,12 +135,12 @@ Use `cluster assign --hostGroup host_group_1 --host server.ambari.com`.
 
 You can always `cluster reset` or `cluster preview` to modify or check the configuration.
 ```
-HOSTGROUP     HOST
+  HOSTGROUP     HOST
   ------------  -----------------
   host_group_1  server.ambari.com
 ```
 
-Once you are happy with you can choose `cluster create` to start building the cluster. Progress can be checked either at Amabri UI or using the `tasks` command.
+Once you are happy with host assignment, you can choose `cluster create` to start building the cluster. Progress can be checked either in the Ambari UI or using the `tasks` command.
 ```
   TASK                        STATUS
   --------------------------  -------
