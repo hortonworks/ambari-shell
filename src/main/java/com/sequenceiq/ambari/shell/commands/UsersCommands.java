@@ -28,7 +28,7 @@ import com.sequenceiq.ambari.client.AmbariClient;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 
 /**
- * Service related commands used in the shell.
+ * Commands related to users.
  *
  * @see com.sequenceiq.ambari.client.AmbariClient
  */
@@ -44,9 +44,8 @@ public class UsersCommands implements CommandMarker {
     this.context = context;
   }
 
-
   /**
-   * Checks whether the services stop command is available or not.
+   * Checks whether the users changepassword command is available or not.
    *
    * @return true if available false otherwise
    */
@@ -58,27 +57,20 @@ public class UsersCommands implements CommandMarker {
   /**
    * Change a user's password
    *
-   * @return message
+   * @return message indicating whether the password change was successful
    */
   @CliCommand(value = "users changepassword", help = "Change a user's password")
   public String changePassword(@CliOption(key = "user", mandatory = true, help = "Username") String user,
-		                       @CliOption(key = "oldpassword", mandatory = true, help = "Old password") String oldpassword,
-		                       @CliOption(key = "newpassword", mandatory = true, help = "New password") String newpassword,
-		                       @CliOption(key = "adminuser", mandatory = false, help ="Admin user (true/false)") Boolean adminuser) {
-    
-	  String message = "Changing password for user " + user;
-    
-    if( null == adminuser){
-    	adminuser = true;
-    }
-    
+                               @CliOption(key = "oldpassword", mandatory = true, help = "Password of current user using Ambari Shell") String oldpassword,
+                               @CliOption(key = "newpassword", mandatory = true, help = "New password") String newpassword) {
+    String message;
     try {
-        client.changePassword(user,oldpassword, newpassword,false);
+      client.changePassword(user,oldpassword, newpassword,false);
+      message = "Changed password for user " + user;
     } catch (Exception e) {
-      message = "Cannot change password for user " + user;
+      message = "Could not change password for user " + user;
     }
-    return String.format("%s", message);
+    return message;
   }
 
-  
 }

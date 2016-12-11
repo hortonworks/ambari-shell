@@ -26,7 +26,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.sequenceiq.ambari.client.AmbariClient;
-import com.sequenceiq.ambari.shell.completion.Service;
 import com.sequenceiq.ambari.shell.model.AmbariContext;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -42,9 +41,8 @@ public class UsersCommandsTest {
 
   @Test
   public void testChangePassword() {
-    usersCommands.changePassword("testuser", "oldpass", "newpass", false);
-    verify(client).changePassword("testuser","oldpass","newpass",false);
+    usersCommands.changePassword("testuser", "oldpass", "newpass");
+    verify(client).changePassword("testuser", "oldpass", "newpass", false);
   }
 
-  
 }
